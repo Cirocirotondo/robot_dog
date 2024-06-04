@@ -187,11 +187,16 @@ int from_theta2_to_index(double theta2) {
 double calculate_reward(int abort) {
     if (abort == 1)
         return PENALITY_OOF;
+
+    double penality;
     if (rob_st.x == rob_st_prev.x) 
-        return PENALITY_NM;
-    if (rob_st.x > rob_st_prev.x)
-        return (rob_st.x - rob_st_prev.x)*REWARD_FACTOR;
-    return (rob_st.x - rob_st_prev.x)*REWARD_FACTOR*0.7;    // backward movement is penalized less
+        penality = PENALITY_NM;
+    else if (rob_st.x > rob_st_prev.x)
+        penality = (rob_st.x - rob_st_prev.x)*REWARD_FACTOR;
+    else penality = (rob_st.x - rob_st_prev.x)*REWARD_FACTOR*0.7;    // backward movement is penalized less
+
+    penality += rob_st.x*REWARD_POS;
+    return penality;
 }
 
 //--------------------------------------------------------------------------------

@@ -63,10 +63,12 @@ void init_rob_st() {
     rob_st.thetaA2 = ROB_START_THETA_A2;
     rob_st.thetaB1 = ROB_START_THETA_B1;
     rob_st.thetaB2 = ROB_START_THETA_B2;
-    rob_st.prev_foot_2x = ROB_START_X - ROB_WIDTH/2;
 
-    rob_st.one_contact_first = 1;
-
+    rob_v.foot_1x = ROB_START_X - ROB_WIDTH/2;
+    rob_v.foot_2x = rob_v.foot_1x;
+    rob_st.prev_foot_1x = rob_v.foot_1x;
+    rob_st.prev_foot_2x = rob_v.foot_1x;
+    
     rob_st_prev = rob_st;
 }
 

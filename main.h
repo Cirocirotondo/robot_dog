@@ -64,11 +64,11 @@
 #define ROB_L2_PIX          ROB_L2*PIX_M            // Length of the second segment of the arm (pixels)
 #define THETA1_MIN          (double)(0*PI/180)
 #define THETA1_MAX          (double)(45*PI/180)
-#define NUM_SHOULDER_ANGLES 5
+#define NUM_SHOULDER_ANGLES 4
 #define THETA1_INC          (double)((THETA1_MAX - THETA1_MIN)/(double)(NUM_SHOULDER_ANGLES-1))                     // Discretizatioin step of the servo motors
 #define THETA2_MIN          (double)(45*PI/180)
 #define THETA2_MAX          (double)(100*PI/180)
-#define NUM_ELBOW_ANGLES    8
+#define NUM_ELBOW_ANGLES    6
 #define THETA2_INC          (double)((THETA2_MAX - THETA2_MIN)/(double)(NUM_ELBOW_ANGLES-1))                     // Discretizatioin step of the servo motors
 
 #define ROB_MASS            2                       // Robot mass, in kg

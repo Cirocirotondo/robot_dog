@@ -249,7 +249,7 @@ void draw_stat() {
     textout_ex(bitmap_stat, font, str, STAT_TITLE_X, curr_y, TEXT_COL, BKG);
 
     curr_y += LINE_SPACING;
-    sprintf(str, "Q-Learn Epoch:    %d/%d", epoch, EPISODES);
+    sprintf(str, "Q-Learn Epoch:    %d/%d      ", epoch, EPISODES);
     textout_ex(bitmap_stat, font, str, STAT_TITLE_X, curr_y, TEXT_COL, BKG);
 
     curr_y += LINE_SPACING;

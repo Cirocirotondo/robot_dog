@@ -79,6 +79,9 @@ void *user_input(void* arg){
                 per = task_get_period(selected_task);
                 task_set_period(selected_task, per - 1);
                 task_set_deadline(selected_task, per - 1);
+                if (selected_task == TSK_I_Q && task_get_period(TSK_I_SIM) > task_get_period(TSK_I_Q) - 5){
+                    task_set_period(TSK_I_SIM, task_get_period(TSK_I_Q) - 5);
+                }
                 break;
             case KEY_E:     // Increase selected task period
                 per = task_get_period(selected_task);

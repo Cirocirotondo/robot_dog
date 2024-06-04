@@ -16,14 +16,15 @@
 */
 #define LR                  0.1     // Learning Rate of the Q-Learning
 #define DISCOUNT_FACTOR     0.9
-#define EPISODES            1000
-#define MAX_STEPS           50
+#define EPISODES            2500
+#define MAX_STEPS           100
 #define INITIAL_EPSILON     1.0
 #define MIN_EPSILON         0.1
 #define EPSILON_DECAY       0.999   // Decay factor per episode
 #define PENALITY_OOF        -50.0   // Penality for Out Of Bound movement
 #define PENALITY_NM         -0.1    // Pensality for No Move   
 #define REWARD_FACTOR       100.0    // Reward factor
+#define REWARD_POS          30.0
 #define SAVE_PATH           "q_table.dat"
 
 
