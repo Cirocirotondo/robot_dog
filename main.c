@@ -17,7 +17,7 @@ int epoch = 0;
 double epsilon = 0;
 double episode_rewards = 0;
 int selected_task = 0;
-double q_table[NUM_SHOULDER_ANGLES][NUM_ELBOW_ANGLES][NUM_ACTIONS];
+double q_table[NUM_SHOULDER_ANGLES][NUM_ELBOW_ANGLES][NUM_SHOULDER_ANGLES][NUM_ELBOW_ANGLES][NUM_ACTIONS];
 
 
 int main(void) {
@@ -59,12 +59,11 @@ void init(void) {
 void init_rob_st() {
     rob_st.x = ROB_START_X;
     rob_st.y = ROB_START_Y;
-    rob_st.vx = 0;
-    rob_st.vy = 0;
-    rob_st.alpha = 0; //PI/8;
-    rob_st.w = 0;
-    rob_st.theta1 = ROB_START_THETA1;
-    rob_st.theta2 = ROB_START_THETA2;
+    rob_st.thetaA1 = ROB_START_THETA_A1;
+    rob_st.thetaA2 = ROB_START_THETA_A2;
+    rob_st.thetaB1 = ROB_START_THETA_B1;
+    rob_st.thetaB2 = ROB_START_THETA_B2;
+    rob_st.prev_foot_2x = ROB_START_X - ROB_WIDTH/2;
 
     rob_st.one_contact_first = 1;
 

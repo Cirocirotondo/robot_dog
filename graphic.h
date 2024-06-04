@@ -11,11 +11,6 @@
 #define LINE_SPACING        20
 #define LINE_SPACING_SMALL  12
 
-#define WHITE               15
-#define BLUE                1
-#define YELLOW              14
-#define LIGHT_RED           12
-
 #define BORDER_COL          LIGHT_RED  
 #define TITLE_COL           12
 #define TEXT_COL            WHITE
@@ -95,11 +90,17 @@ BITMAP *bitmap_stat;
 BITMAP *bitmap_task;
 BITMAP *bitmap_qtable;
 
-struct rob_vertexes_pix{    // STRUCT with the coordinates of the vertexes of the robot
-    int x, y;               // centre of the robot body
-    int v[8];               // vertex of the robot body in the form {x1,y1,x2,y2,...} where (x1,y1) is the upper-right vertex and the other vertexes follow in counter-clockwise order
-    int elb_x, elb_y;       // coordinates of the elbow
-    int ee_x, ee_y;         // coordinates of the end effector 
+struct rob_vertexes_pix{        // STRUCT with the coordinates of the vertexes of the robot
+    int x, y;                   // centre of the robot body
+    int v[8];                   // vertex of the robot body in the form {x1,y1,x2,y2,...} where (x1,y1) is the upper-right vertex and the other vertexes follow in counter-clockwise order
+    int knee1x, knee1y;         // coordinates of the knee 1
+    int foot1x, foot1y;         // coordinates of the foot 1
+    int knee2x, knee2y;         // coordinates of the knee 2
+    int foot2x, foot2y;         // coordinates of the foot 2
+    int knee3x, knee3y;         // coordinates of the knee 3
+    int foot3x, foot3y;         // coordinates of the foot 3
+    int knee4x, knee4y;         // coordinates of the knee 4
+    int foot4x, foot4y;         // coordinates of the foot 4
 };
 struct rob_vertexes_pix rob_v_pix;
 

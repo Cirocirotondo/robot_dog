@@ -1,0 +1,9 @@
+- potrei mettere lo zoom, però dovrei trasformare tantissimi #define in variabili globali
+- potrei mettere lo shift delle x del mondo -> fino a che livello mi devo spingere? è ovvio che potrei mettere 8000 features in più, però sono stronzatine
+
+- ORGANIZZAZIONE DEL CODICE:
+    - simulatore: è totalmente separato dalla grafica. Usa coordinate reali
+    - codice presente una e una sola volta (ad esempio: move_robot() al posto che essere implementata sia in user.c che in qlearning.c viene implementata solo in simulator).
+    - tante define, codice scritto in funzione di esse
+    - codice strutturato che sia facilmente implementabile ulteriori features, come ad esempio nel caso del robottino una dinamica per la caduta, oppure nel cane robot 
+    una dinamica che prevede anche la rotazione del corpo del robot.

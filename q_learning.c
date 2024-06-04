@@ -13,8 +13,8 @@ void* q_learning_train(void* arg) {
     double reward;      // Reward for a single move
     double total_episode_reward;
     int abort;          // Abort = 1, if the robot tries to move its joints over the limits
-    int shoulder_angle_i, new_shoulder_angle_i;
-    int elbow_angle_i, new_elbow_angle_i;
+    int hipA_angle_i, new_hipA_angle_i, hipB_angle_i, new_hipB_angle_i;
+    int kneeA_angle_i, new_kneeA_angle_i, kneeB_angle_i, new_kneeB_angle_i;
 
     i = get_task_index(arg);
     set_period(i);
@@ -35,11 +35,13 @@ void* q_learning_train(void* arg) {
         for (step = 0; step < MAX_STEPS && !end && qlearn_active == 1; step++) {
 
             // Get angle indexes
-            shoulder_angle_i = from_theta1_to_index(rob_st.theta1);
-            elbow_angle_i = from_theta2_to_index(rob_st.theta2);
-
+            hipA_angle_i = from_theta1_to_index(rob_st.thetaA1);
+            kneeA_angle_i = from_theta2_to_index(rob_st.thetaA2);
+            hipB_angle_i = from_theta1_to_index(rob_st.thetaB1);
+            kneeB_angle_i = from_theta2_to_index(rob_st.thetaB2);
+            
             // Choose an action
-            action = choose_action(shoulder_angle_i, elbow_angle_i, epsilon);
+            action = choose_action(hipA_angle_i, kneeA_angle_i, hipB_angle_i, kneeB_angle_i, epsilon);
 
             // Take action and observe new state and reward
             abort = move_robot(action);
@@ -49,11 +51,13 @@ void* q_learning_train(void* arg) {
             total_episode_reward = total_episode_reward + reward;
 
             // Update Q-value using Q-learning equation
-            new_shoulder_angle_i = from_theta1_to_index(rob_st.theta1);
-            new_elbow_angle_i = from_theta2_to_index(rob_st.theta2);
+            new_hipA_angle_i = from_theta1_to_index(rob_st.thetaA1);
+            new_kneeA_angle_i = from_theta2_to_index(rob_st.thetaA2);
+            new_hipB_angle_i = from_theta1_to_index(rob_st.thetaB1);
+            new_kneeB_angle_i = from_theta2_to_index(rob_st.thetaB2);
 
-            int best_next_action = choose_best_action(new_shoulder_angle_i, new_elbow_angle_i);
-            q_table[shoulder_angle_i][elbow_angle_i][action] = (1 - LR)*q_table[shoulder_angle_i][elbow_angle_i][action] + LR*(reward+DISCOUNT_FACTOR*q_table[new_shoulder_angle_i][new_elbow_angle_i][best_next_action]);
+            int best_next_action = choose_best_action(new_hipA_angle_i, new_kneeA_angle_i, new_hipB_angle_i, new_hipB_angle_i);
+            q_table[hipA_angle_i][kneeA_angle_i][hipB_angle_i][kneeB_angle_i][action] = (1 - LR)*q_table[hipA_angle_i][kneeA_angle_i][hipB_angle_i][kneeB_angle_i][action] + LR*(reward+DISCOUNT_FACTOR*q_table[new_hipA_angle_i][new_kneeA_angle_i][new_hipB_angle_i][new_kneeB_angle_i][best_next_action]);
             
             // Check if the episode is done
             if (abort) {
@@ -84,8 +88,8 @@ void* q_learning_train(void* arg) {
 void* q_learning_run(void* arg) {
     int i;              // Task index
     int action;         // Action index
-    int shoulder_angle_i;
-    int elbow_angle_i;
+    int hipA_angle_i, hipB_angle_i;
+    int kneeA_angle_i, kneeB_angle_i;
 
     i = get_task_index(arg);
     set_period(i);
@@ -97,12 +101,14 @@ void* q_learning_run(void* arg) {
 
     while (!end && qlearn_active == 2) {
 
-        shoulder_angle_i = from_theta1_to_index(rob_st.theta1);
-        elbow_angle_i = from_theta2_to_index(rob_st.theta2); 
+        hipA_angle_i = from_theta1_to_index(rob_st.thetaA1);
+        kneeA_angle_i = from_theta2_to_index(rob_st.thetaA2); 
+        hipB_angle_i = from_theta1_to_index(rob_st.thetaB1);
+        kneeB_angle_i = from_theta2_to_index(rob_st.thetaB2);
 
-        action = choose_best_action(shoulder_angle_i, elbow_angle_i);
+        action = choose_best_action(hipA_angle_i, kneeA_angle_i, hipB_angle_i, kneeB_angle_i);
         // if(DEBUG)
-        //     printf("theta1: %1.2f; theta2: %1.2f; Shoulder: %d, Elbow: %d, action: %d\n", rob_st.theta1*180/PI, rob_st.theta2*180/PI, shoulder_angle_i, elbow_angle_i, action);
+        //     printf("theta1: %1.2f; theta2: %1.2f; Shoulder: %d, Elbow: %d, action: %d\n", rob_st.theta1*180/PI, rob_st.theta2*180/PI, hipA_angle_i, kneeA_angle_i, action);
 
         move_robot(action);
 
@@ -120,31 +126,32 @@ void* q_learning_run(void* arg) {
 // Q_INIT: Initialize Q-Table to zeros
 //--------------------------------------------------------------------------------
 void q_init() {
-    for (int i = 0; i < NUM_SHOULDER_ANGLES; ++i) {
-        for (int j = 0; j < NUM_ELBOW_ANGLES; ++j) {
-            for (int k = 0; k < NUM_ACTIONS; ++k) {
-                q_table[i][j][k] = 0.0;
-            }
-        }
-    }
+    for (int i = 0; i < NUM_SHOULDER_ANGLES; ++i) 
+        for (int j = 0; j < NUM_ELBOW_ANGLES; ++j) 
+            for (int k = 0; k < NUM_SHOULDER_ANGLES; ++k)
+                for (int l = 0; l < NUM_ELBOW_ANGLES; ++l)       
+                    for (int m = 0; m < NUM_ACTIONS; ++m) {
+                        q_table[i][j][k][l][m] = 0.0;
+                    }
+
 }
 
 //--------------------------------------------------------------------------------
 // CHOOSE_ACTION: With probability EPSILON, choose a random action. Else, choose 
 // the action with the greatest expected reward.
 //--------------------------------------------------------------------------------
-int choose_action(int shoulder_angle_i, int elbow_angle_i, double epsilon) {
+int choose_action(int hipA_angle_i, int kneeA_angle_i, int hipB_angle_i, int kneeB_angle_i, double epsilon) {
     if ((double)rand() / RAND_MAX < epsilon) {
         return rand() % NUM_ACTIONS;
     } else {
-        return choose_best_action(shoulder_angle_i, elbow_angle_i);
+        return choose_best_action(hipA_angle_i, kneeA_angle_i, hipB_angle_i, kneeB_angle_i);
     }
 }
 
 //--------------------------------------------------------------------------------
 // CHOOSE_BEST_ACTION: Choose the action with the greatest expected reward.
 //--------------------------------------------------------------------------------
-int choose_best_action(int shoulder_angle_i, int elbow_angle_i) {
+int choose_best_action(int hipA_angle_i, int kneeA_angle_i, int hipB_angle_i, int kneeB_angle_i) {
     double max_q_value = -INFINITY;
     int best_action = 0;
     int action;
@@ -152,7 +159,7 @@ int choose_best_action(int shoulder_angle_i, int elbow_angle_i) {
     
     // find action with the greatest expected reward
     for (action = 0; action < NUM_ACTIONS; action++) {
-        q_value = q_table[shoulder_angle_i][elbow_angle_i][action];
+        q_value = q_table[hipA_angle_i][kneeA_angle_i][hipB_angle_i][kneeB_angle_i][action];
         if (q_value > max_q_value) {
             max_q_value = q_value;
             best_action = action;
@@ -192,9 +199,9 @@ double calculate_reward(int abort) {
 //--------------------------------------------------------------------------------
 void printf_qtable(){
     for(int r = 0; r < NUM_SHOULDER_ANGLES; r++){
-        for(int c = 0; c < NUM_ELBOW_ANGLES; c++)
-            printf("[%1.1f; %1.1f; %1.1f; %1.1f] ; ",q_table[r][c][0], q_table[r][c][1], q_table[r][c][2], q_table[r][c][3]);
-        printf("\n");
+        // for(int c = 0; c < NUM_ELBOW_ANGLES; c++)
+        //     printf("[%1.1f; %1.1f; %1.1f; %1.1f] ; ",q_table[r][c][0], q_table[r][c][1], q_table[r][c][2], q_table[r][c][3]);
+        // printf("\n");
     }
 }
 

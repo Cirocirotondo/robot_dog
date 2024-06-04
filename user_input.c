@@ -17,20 +17,36 @@ void *user_input(void* arg){
         scan = get_scancode();
 
         switch (scan) {
-            case KEY_DOWN:
+            case KEY_LEFT :
                 move_robot(0);
                 break;
                 
-            case KEY_UP:
+            case KEY_RIGHT:
                 move_robot(1);
                 break;
 
-            case KEY_LEFT:
+            case KEY_UP:
                 move_robot(2);
                 break;
 
-            case KEY_RIGHT:
+            case KEY_DOWN:
                 move_robot(3);
+                break;
+
+            case KEY_A:
+                move_robot(4);
+                break;
+                
+            case KEY_D:
+                move_robot(5);
+                break;
+
+            case KEY_W:
+                move_robot(6);
+                break;
+
+            case KEY_S:
+                move_robot(7);
                 break;
 
             case KEY_SPACE:
@@ -64,7 +80,7 @@ void *user_input(void* arg){
                 task_set_period(selected_task, per - 1);
                 task_set_deadline(selected_task, per - 1);
                 break;
-            case KEY_W:     // Increase selected task period
+            case KEY_E:     // Increase selected task period
                 per = task_get_period(selected_task);
                 task_set_period(selected_task, per + 2);
                 task_set_deadline(selected_task, per + 2);
