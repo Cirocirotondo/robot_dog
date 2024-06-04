@@ -16,7 +16,7 @@
 */
 #define LR                  0.1     // Learning Rate of the Q-Learning
 #define DISCOUNT_FACTOR     0.9
-#define EPISODES            2500
+#define EPISODES            2700
 #define MAX_STEPS           100
 #define INITIAL_EPSILON     1.0
 #define MIN_EPSILON         0.1

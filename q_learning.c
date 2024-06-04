@@ -220,9 +220,10 @@ void save_q_table(const char *filename) {
         exit(EXIT_FAILURE);
     }
     for (int i = 0; i < NUM_SHOULDER_ANGLES; ++i) {
-        for (int j = 0; j < NUM_ELBOW_ANGLES; ++j) {
-            fwrite(q_table[i][j], sizeof(double), NUM_ACTIONS, file);
-        }
+        for (int j = 0; j < NUM_ELBOW_ANGLES; ++j) 
+            for (int k = 0; k < NUM_SHOULDER_ANGLES; k++)
+                for (int l = 0; l < NUM_ELBOW_ANGLES; l++)
+                    fwrite(q_table[i][j][k][l], sizeof(double), NUM_ACTIONS, file);
     }
     fclose(file);
 }
@@ -238,9 +239,10 @@ void load_q_table(const char *filename) {
         exit(EXIT_FAILURE);
     }
     for (int i = 0; i < NUM_SHOULDER_ANGLES; ++i) {
-        for (int j = 0; j < NUM_ELBOW_ANGLES; ++j) {
-            fread(q_table[i][j], sizeof(double), NUM_ACTIONS, file);
-        }
+        for (int j = 0; j < NUM_ELBOW_ANGLES; ++j) 
+            for (int k = 0; k < NUM_SHOULDER_ANGLES; k++)
+                for (int l = 0; l < NUM_ELBOW_ANGLES; l++)
+                    fread(q_table[i][j][k][l], sizeof(double), NUM_ACTIONS, file);
     }
     fclose(file);
 }
